@@ -3,9 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/mykbit/File-Organizer-Go/main/files"
 	"os"
 	"strings"
+
+	"github.com/mykbit/File-Organizer-Go/files"
 )
 
 var pl = fmt.Println
@@ -29,6 +30,6 @@ func getSourceFolder(r *bufio.Reader) string {
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	pf("Welcome to File Organizer!\nPlease, choose the directory you want to organize: ")
-	SourceFolder := getSourceFolder(reader)
-	pl(SourceFolder)
+	sourceFolder := getSourceFolder(reader)
+	files.BrowseFolder(sourceFolder)
 }
