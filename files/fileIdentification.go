@@ -43,7 +43,6 @@ type audio struct {
 }
 
 func categorizeFile(name string, extension string, category string, filePath string) {
-	defer wg.Done()
 	pf("Categorizing file %s with extension %s\n", name, extension)
 	fileLocation := filePath + "/" + name
 	fileInfo, err := os.Stat(fileLocation)
@@ -73,6 +72,7 @@ func categorizeFile(name string, extension string, category string, filePath str
 }
 
 func processFile(name string, extension string, filePath string) {
+	defer wg.Done()
 	jsonData, err := os.ReadFile("files/extensions.json")
 	if err != nil {
 		panic(err)
@@ -87,7 +87,8 @@ func processFile(name string, extension string, filePath string) {
 	if found {
 		categorizeFile(name, extension, category, filePath)
 	} else {
-		panic("Extension not found. Please, add it to extensions.json")
+		pf("Extension %s not found. This file will be skipped. Please, add it to extensions.json\n", extension)
+		return
 	}
 }
 
@@ -127,18 +128,18 @@ func BrowseFolder(path string) {
 	wg.Wait()
 
 	// for _, image := range Images {
-	// 	pf("%s\n", image.filename)
+	// 	pf("Image: %s\n", image.filename)
 	// }
 
 	// for _, document := range Documents {
-	// 	pf("%s\n", document.filename)
+	// 	pf("Doc: %s\n", document.filename)
 	// }
 
 	// for _, video := range Videos {
-	// 	pf("%s\n", video.filename)
+	// 	pf("Video: %s\n", video.filename)
 	// }
 
 	// for _, audio := range Audios {
-	// 	pf("%s\n", audio.filename)
+	// 	pf("Audio: %s\n", audio.filename)
 	// }
 }
