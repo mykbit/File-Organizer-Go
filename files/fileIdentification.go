@@ -11,10 +11,10 @@ import (
 
 var (
 	pf        = fmt.Printf
-	Images    []image
-	Documents []document
-	Videos    []video
-	Audios    []audio
+	Images    []file
+	Documents []file
+	Videos    []file
+	Audios    []file
 	mutex     sync.Mutex
 	wg        sync.WaitGroup
 )
@@ -24,22 +24,6 @@ type file struct {
 	path        string
 	size        int64
 	lastModDate time.Time
-}
-
-type image struct {
-	file
-}
-
-type document struct {
-	file
-}
-
-type video struct {
-	file
-}
-
-type audio struct {
-	file
 }
 
 func categorizeFile(name string, extension string, category string, filePath string) {
@@ -54,17 +38,13 @@ func categorizeFile(name string, extension string, category string, filePath str
 	mutex.Lock()
 	switch category {
 	case "Image":
-		image := image{file}
-		Images = append(Images, image)
+		Images = append(Images, file)
 	case "Document":
-		document := document{file}
-		Documents = append(Documents, document)
+		Documents = append(Documents, file)
 	case "Video":
-		video := video{file}
-		Videos = append(Videos, video)
+		Videos = append(Videos, file)
 	case "Audio":
-		audio := audio{file}
-		Audios = append(Audios, audio)
+		Audios = append(Audios, file)
 	default:
 		panic("Category not found. Please, add it to extensions.json")
 	}
@@ -127,19 +107,19 @@ func BrowseFolder(path string) {
 
 	wg.Wait()
 
-	// for _, image := range Images {
-	// 	pf("Image: %s\n", image.filename)
-	// }
+	for _, image := range Images {
+		pf("Image: %s\n", image.filename)
+	}
 
-	// for _, document := range Documents {
-	// 	pf("Doc: %s\n", document.filename)
-	// }
+	for _, document := range Documents {
+		pf("Doc: %s\n", document.filename)
+	}
 
-	// for _, video := range Videos {
-	// 	pf("Video: %s\n", video.filename)
-	// }
+	for _, video := range Videos {
+		pf("Video: %s\n", video.filename)
+	}
 
-	// for _, audio := range Audios {
-	// 	pf("Audio: %s\n", audio.filename)
-	// }
+	for _, audio := range Audios {
+		pf("Audio: %s\n", audio.filename)
+	}
 }
