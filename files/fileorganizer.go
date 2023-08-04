@@ -6,20 +6,39 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	destpaths "github.com/mykbit/File-Organizer-Go/paths"
 )
 
 var (
-	pf    = fmt.Printf
-	mutex sync.Mutex
-	wg    sync.WaitGroup
+	pf = fmt.Printf
+	wg sync.WaitGroup
 )
 
 type file struct {
 	fileName  string
 	extension string
 	path      string
+}
+
+func cleanSourceFolder(sourceFolder string) error {
+	fmt.Printf("Removing folder %s\n", sourceFolder)
+	err := os.RemoveAll(sourceFolder)
+	if err != nil {
+		if os.IsPermission(err) {
+			return fmt.Errorf("permission denied: unable to clean source folder")
+		}
+		return err
+	}
+
+	// Add a delay and check if the folder still exists
+	time.Sleep(time.Millisecond * 5) // Adjust the delay as needed
+	if _, err := os.Stat(sourceFolder); err == nil {
+		return fmt.Errorf("folder still exists after cleaning")
+	}
+
+	return nil
 }
 
 func organize(orgFile file, destDirPath string) {
@@ -104,4 +123,5 @@ func BrowseFolder(path string) {
 	}
 
 	wg.Wait()
+	go cleanSourceFolder(path)
 }
