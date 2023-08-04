@@ -1,0 +1,11 @@
+{
+    "darwin" : {
+        "base" : "/Users/",
+        "folders" : {
+            "Images" : "/Pictures/",
+            "Documents" : "/Documents/",
+            "Audios" : "/Music/",
+            "Videos" : "/Movies/"
+        }
+    }
+}
