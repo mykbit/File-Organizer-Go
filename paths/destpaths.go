@@ -41,9 +41,4 @@ func SetDefaultDestinationPaths() {
 	DocumentPath = os["base"].(string) + user.Username + os["folders"].(map[string]interface{})["Documents"].(string)
 	AudioPath = os["base"].(string) + user.Username + os["folders"].(map[string]interface{})["Audios"].(string)
 	VideoPath = os["base"].(string) + user.Username + os["folders"].(map[string]interface{})["Videos"].(string)
-
-	pf("Image path: %s\n", ImagePath)
-	pf("Document path: %s\n", DocumentPath)
-	pf("Audio path: %s\n", AudioPath)
-	pf("Video path: %s\n", VideoPath)
 }

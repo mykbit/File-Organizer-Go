@@ -23,7 +23,7 @@ type file struct {
 }
 
 func cleanSourceFolder(sourceFolder string) error {
-	fmt.Printf("Removing folder %s\n", sourceFolder)
+	fmt.Printf("Cleaning folder %s\n", sourceFolder)
 	err := os.RemoveAll(sourceFolder)
 	if err != nil {
 		if os.IsPermission(err) {
@@ -91,7 +91,7 @@ func processFile(name string, extension string, filePath string) {
 
 // Add file identification methods here
 func BrowseFolder(path string) {
-	pf("Browsing directory: %s\n", path)
+	pf("\nBrowsing directory: %s\n", path)
 	dir, err := os.Open(path)
 	if err != nil {
 		panic(err)
