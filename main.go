@@ -6,10 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/mykbit/File-Organizer-Go/files"
+	fileorganizer "github.com/mykbit/File-Organizer-Go/files"
+	destpaths "github.com/mykbit/File-Organizer-Go/paths"
 )
 
-var pl = fmt.Println
 var pf = fmt.Printf
 
 func getSourceFolder(r *bufio.Reader) string {
@@ -31,5 +31,6 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	pf("Welcome to File Organizer!\nPlease, choose the directory you want to organize: ")
 	sourceFolder := getSourceFolder(reader)
-	files.BrowseFolder(sourceFolder)
+	destpaths.SetDefaultDestinationPaths()
+	fileorganizer.BrowseFolder(sourceFolder)
 }

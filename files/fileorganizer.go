@@ -1,4 +1,4 @@
-package files
+package fileorganizer
 
 import (
 	"encoding/json"
@@ -6,49 +6,47 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
-	"time"
+
+	destpaths "github.com/mykbit/File-Organizer-Go/paths"
 )
 
 var (
-	pf        = fmt.Printf
-	Images    []file
-	Documents []file
-	Videos    []file
-	Audios    []file
-	mutex     sync.Mutex
-	wg        sync.WaitGroup
+	pf    = fmt.Printf
+	mutex sync.Mutex
+	wg    sync.WaitGroup
 )
 
 type file struct {
-	filename    string
-	path        string
-	size        int64
-	lastModDate time.Time
+	fileName  string
+	extension string
+	path      string
 }
 
-func categorizeFile(name string, extension string, category string, filePath string) {
-	pf("Categorizing file %s with extension %s\n", name, extension)
-	fileLocation := filePath + "/" + name
-	fileInfo, err := os.Stat(fileLocation)
+func organize(orgFile file, destDirPath string) {
+	destFilePath := filepath.Join(destDirPath, orgFile.fileName)
+	err := os.Rename(filepath.Join(orgFile.path, orgFile.fileName), destFilePath)
 	if err != nil {
 		panic(err)
 	}
-	file := file{name, filePath, fileInfo.Size(), fileInfo.ModTime()}
+}
 
-	mutex.Lock()
+func categorizeFile(name string, extension string, category string, filePath string) {
+	pf("Categorizing and moving file %s with extension %s\n", name, extension)
+
+	curFile := file{name, extension, filePath}
+
 	switch category {
 	case "Image":
-		Images = append(Images, file)
+		organize(curFile, destpaths.ImagePath)
 	case "Document":
-		Documents = append(Documents, file)
+		organize(curFile, destpaths.DocumentPath)
 	case "Video":
-		Videos = append(Videos, file)
+		organize(curFile, destpaths.VideoPath)
 	case "Audio":
-		Audios = append(Audios, file)
+		organize(curFile, destpaths.AudioPath)
 	default:
 		panic("Category not found. Please, add it to extensions.json")
 	}
-	mutex.Unlock()
 }
 
 func processFile(name string, extension string, filePath string) {
@@ -106,20 +104,4 @@ func BrowseFolder(path string) {
 	}
 
 	wg.Wait()
-
-	for _, image := range Images {
-		pf("Image: %s\n", image.filename)
-	}
-
-	for _, document := range Documents {
-		pf("Doc: %s\n", document.filename)
-	}
-
-	for _, video := range Videos {
-		pf("Video: %s\n", video.filename)
-	}
-
-	for _, audio := range Audios {
-		pf("Audio: %s\n", audio.filename)
-	}
 }
